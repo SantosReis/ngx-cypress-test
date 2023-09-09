@@ -41,6 +41,4 @@ testem.log
 Thumbs.db
 
 # examples
-/cypress/e2e1-getting-started
-/cypress/e2e/2-advanced-examples
 /src
