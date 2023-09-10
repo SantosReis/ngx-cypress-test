@@ -100,17 +100,23 @@ describe('Our first suite', () => {
     })
   })
 
+  //assertion options to choose
   it('Invoke command', () => {
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Form Layouts').click()
 
-    //1
-    cy.get('[for="exampleInputEmail1"]').should('contain', 'Email address')
+    //1 should
+    cy.get('[for="exampleInputEmail1"]')
+      .should('contain', 'Email address')
+      .should('have.class', 'label')
+      .and('have.text', 'Email address')
 
-    //2 jquery then
+    //2 expect
     cy.get('[for="exampleInputEmail1"]').then((label) => {
       expect(label.text()).to.equal('Email address')
+      expect(label).to.have.class('label')
+      expect(label).to.have.text('Email address')
     })
 
     //3 cypress invoke
@@ -141,7 +147,7 @@ describe('Our first suite', () => {
       })
   })
 
-  it('Assert property', () => {
+  it.only('Assert property', () => {
     function selectDayFromCurrent(day) {
       let date = new Date()
       date.setDate(date.getDate() + day) //set number of days
@@ -175,7 +181,8 @@ describe('Our first suite', () => {
         cy.wrap(input).click()
 
         let dateAssert = selectDayFromCurrent(1)
-        cy.wrap(input).invoke('prop', 'value').should('contain', dateAssert)
+        //cy.wrap(input).invoke('prop', 'value').should('contain', dateAssert) //invoke assertion way
+        cy.wrap(input).should('have.value', dateAssert) //should assertion way
       })
   })
 
@@ -295,7 +302,7 @@ describe('Our first suite', () => {
     })
   })
 
-  it.only('popups and tooltips', function () {
+  it('popups and tooltips', function () {
     cy.visit('/')
     cy.contains('Modal & Overlays').click()
     cy.contains('Tooltip').click()
