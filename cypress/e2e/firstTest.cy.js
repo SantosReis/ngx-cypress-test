@@ -141,7 +141,30 @@ describe('Our first suite', () => {
       })
   })
 
-  it('Assert property', () => {
+  it.only('Assert property', () => {
+    function selectDayFromCurrent(day) {
+      let date = new Date()
+      date.setDate(date.getDate() + day) //set number of days
+      let futureDay = date.getDate()
+      let futureMonth = date.toLocaleString('default', { month: 'short' })
+      let dateAssert = futureMonth + ' ' + futureDay + ', ' + date.getFullYear()
+
+      cy.get('nb-calendar-navigation')
+        .invoke('attr', 'ng-reflect-date')
+        .then((dateAttribute) => {
+          if (!dateAttribute.includes(futureMonth)) {
+            cy.get('[data-name="chevron-right"]').click()
+            selectDayFromCurrent(day)
+          } else {
+            cy.get('nb-calendar-day-picker [class="day-cell ng-star-inserted"]')
+              .contains(futureDay)
+              .click()
+          }
+        })
+
+      return dateAssert
+    }
+
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Datepicker').click()
@@ -150,12 +173,13 @@ describe('Our first suite', () => {
       .find('input')
       .then((input) => {
         cy.wrap(input).click()
-        cy.get('nb-calendar-day-picker').contains('17').click()
-        cy.wrap(input).invoke('prop', 'value').should('contain', 'Sep 17, 2023')
+
+        let dateAssert = selectDayFromCurrent(1)
+        cy.wrap(input).invoke('prop', 'value').should('contain', dateAssert)
       })
   })
 
-  it('Assert property', () => {
+  it('radio button', () => {
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Form Layouts').click()
@@ -176,7 +200,7 @@ describe('Our first suite', () => {
       })
   })
 
-  it.only('Check boxes', () => {
+  it('Check boxes', () => {
     cy.visit('/')
     cy.contains('Modal & Overlays').click()
     cy.contains('Toastr').click()
