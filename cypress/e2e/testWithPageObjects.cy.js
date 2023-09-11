@@ -1,4 +1,7 @@
-import { onNavigationPage } from '../support/page_objects/navigationPage'
+import { navigateTo } from '../support/page_objects/navigationPage'
+import { onFormLayoutsPage } from '../support/page_objects/formLayoutsPage'
+import { onDatePickerPage } from '../support/page_objects/datepickerPage'
+import { onSmartTablePage } from '../support/page_objects/smartTablePage'
 
 describe('Tets with Page Object', () => {
   beforeEach('open application', () => {
@@ -7,14 +10,32 @@ describe('Tets with Page Object', () => {
 
   it('verify navigations across the pages ', () => {
     //Forms
-    onNavigationPage.formLayoutsPage()
-    onNavigationPage.datepickerPage()
+    navigateTo.formLayoutsPage()
+    navigateTo.datepickerPage()
 
     //Modal & Overlays
-    onNavigationPage.modalToastrPage()
-    onNavigationPage.modalTooltipPage()
+    navigateTo.modalToastrPage()
+    navigateTo.modalTooltipPage()
 
     //Tables & Data
-    onNavigationPage.smartTablePage()
+    navigateTo.smartTablePage()
+  })
+
+  it.only('Submit inline and basic form to select calendar', () => {
+    navigateTo.formLayoutsPage()
+    onFormLayoutsPage.submitInlineFormWithNameANdEmail('Artem', 'test@test.com')
+    onFormLayoutsPage.submitBasicFormWithEmailAndPassword(
+      'test@test.com',
+      'password'
+    )
+
+    navigateTo.datepickerPage()
+    onDatePickerPage.selectCommonDatepickerDateFromToday(1)
+    onDatePickerPage.selectDatepickerWithRangeFromToday(7, 14)
+
+    navigateTo.smartTablePage()
+    onSmartTablePage.addNewRecordWithFirstAndLastName('Artem', 'Bondar')
+    onSmartTablePage.updateAgeByFirstName('Artem', '60')
+    onSmartTablePage.deleteRowbyIndex(1)
   })
 })

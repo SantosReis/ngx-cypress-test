@@ -39,4 +39,4 @@ export class NavigationPage {
   }
 }
 
-export const onNavigationPage = new NavigationPage()
+export const navigateTo = new NavigationPage()
